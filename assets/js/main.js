@@ -422,30 +422,63 @@
     }
     imJs.m();
 
-    function makePayment() {
-        FlutterwaveCheckout({
-          public_key: "FLWPUBK_TEST-SANDBOXDEMOKEY-X",
-          tx_ref: "titanic-48981487343MDI0NzMx",
-          amount: 54600,
-          currency: "NGN",
-          payment_options: "card, banktransfer, ussd",
-          redirect_url: "https://glaciers.titanic.com/handle-flutterwave-payment",
-          meta: {
-            consumer_id: 23,
-            consumer_mac: "92a3-912ba-1192a",
+    // function makePayment() {
+    //     FlutterwaveCheckout({
+    //       public_key: "FLWPUBK_TEST-SANDBOXDEMOKEY-X",
+    //       tx_ref: "titanic-48981487343MDI0NzMx",
+    //       amount: 54600,
+    //       currency: "NGN",
+    //       payment_options: "card, banktransfer, ussd",
+    //       redirect_url: "https://glaciers.titanic.com/handle-flutterwave-payment",
+    //       meta: {
+    //         consumer_id: 23,
+    //         consumer_mac: "92a3-912ba-1192a",
+    //       },
+    //       customer: {
+    //         email: "rose@unsinkableship.com",
+    //         phone_number: "08102909304",
+    //         name: "Rose DeWitt Bukater",
+    //       },
+    //       customizations: {
+    //         title: "The Titanic Store",
+    //         description: "Payment for an awesome cruise",
+    //         logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+    //       },
+    //     });
+    //   }
+
+    // }
+
+    document.getElementById('payButton').addEventListener('click', function () {
+        var uniqueReference = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        var handler = PaystackPop.setup({
+            key: 'pk_live_721bdd259ebe67a6599a78574474cdc664a3da7a', // Replace with your actual Paystack public key
+          email: 'emmanuelokolie550@gmail.com', // Replace with the customer's email
+          amount: '50000', // Replace with the amount to charge in kobo (e.g., 50000 for ₦500)
+          currency: 'NGN', // Replace with your preferred currency code
+          ref: uniqueReference, // Use the unique reference for the payment
+          metadata: {
+            custom_fields: [
+              {
+                display_name: 'Product',
+                variable_name: 'product',
+                value: 'Sample Product'
+              }
+            ]
           },
-          customer: {
-            email: "rose@unsinkableship.com",
-            phone_number: "08102909304",
-            name: "Rose DeWitt Bukater",
+          callback: function(response) {
+            // This function will be called after a successful payment.
+            // You can handle the payment response here.
+            console.log(response);
           },
-          customizations: {
-            title: "The Titanic Store",
-            description: "Payment for an awesome cruise",
-            logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
-          },
+          onClose: function() {
+            // This function will be called when the payment dialog is closed.
+            console.log('Payment closed');
+          }
         });
-      }
+        handler.openIframe();
+      });
+      
 
 
 })(jQuery, window)
